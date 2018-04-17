@@ -43,7 +43,7 @@ if(!address){
     json: true
   },(err, response, body)=>{
     if(err){                                               //some error with the server
-      console.log('There was an error with the request.');
+      console.log('There was an error with the Google servers.');
       console.log(err);
     }else if(body.status==='ZERO_RESULTS'){                 //if an unknown address is entered
       console.log('Unable to find that address.')
