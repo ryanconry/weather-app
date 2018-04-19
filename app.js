@@ -1,7 +1,5 @@
 const yargs = require('yargs');
-const addressRequest = require('./address_request.js');
-var request = require('request');
-
+const addressRequest = require('./geocode/address_request.js');
 
 var yargv = yargs
 .option({
@@ -27,38 +25,10 @@ var yargv = yargs
 var address=yargv.address;
 var city = yargv.city;
 
-
-if(!address){
-  console.log('No address provided.');
-}else if(!city){
-  console.log('No city provided.')
-}else{
-
-  var fullAddress = `${address} ${city}`;
-  //var formattedAddress = fullAddress.replace(/ /g,'%20');
-  var formattedAddress = encodeURIComponent(fullAddress);
-
-  request({
-    url: `https://maps.googleapis.com/maps/api/geocode/json?address=${formattedAddress}`,
-    json: true
-  },(err, response, body)=>{
-    if(err){                                               //some error with the server
-      console.log('There was an error with the Google servers.');
-      console.log(err);
-    }else if(body.status==='ZERO_RESULTS'){                 //if an unknown address is entered
-      console.log('Unable to find that address.')
-    }else if(body.status === 'OK'){
-      var resultObject={};
-      const result = body.results[0];
-      //console.log(JSON.stringify(body,undefined,2))
-      resultObject.resultAddress= result.formatted_address,
-      resultObject.lat= result.geometry.location.lat,
-      resultObject.lng= result.geometry.location.lng
-      // return resultObject;
-      console.log(resultObject);
-    }
-  });
-  //requestObject=addressRequest.getInfo(address,city);
-  //console.log(requestObject);
-
-}
+addressRequest.getInfo(address,city, (errorMessage,results) => {
+  if(errorMessage){
+    console.log(errorMessage)
+  }else{
+    console.log(JSON.stringify(results, undefined, 2));
+  }
+})
