@@ -1,6 +1,6 @@
 const request = require('request');
 
-var getInfo = (address) => {
+var geoCodeAddress = (address) => {
   return new Promise((resolve,reject) =>{
     var formattedAddress = encodeURIComponent(address);
     request({
@@ -24,6 +24,9 @@ var getInfo = (address) => {
   })
 };
 
-module.exports = {
-  getInfo
-}
+
+geoCodeAddress('19146').then((location) => {
+  console.log(location);
+}).catch((errorMessage)=>{
+  console.log(errorMessage);
+});
